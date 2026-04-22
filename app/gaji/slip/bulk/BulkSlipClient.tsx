@@ -4,7 +4,8 @@ import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import type { Karyawan } from "@/lib/actions/karyawan";
 import type { Perusahaan } from "@/lib/actions/perusahaan";
-import { BULAN, PTKP, formatRp, calcAll } from "@/lib/slip";
+import { BULAN, formatRp, calcAll } from "@/lib/slip";
+import { saveSlipHistory } from "@/lib/actions/slip-history";
 
 // ─── Slip Preview (self-contained for bulk) ───────────────────────────────────
 
@@ -156,6 +157,7 @@ export default function BulkSlipClient({
   const [periode, setPeriode] = useState({ bulan: now.getMonth() + 1, tahun: now.getFullYear() });
   const [generated, setGenerated] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [saving, setSaving] = useState(false);
 
   useEffect(() => { setMounted(true); }, []);
 
@@ -176,9 +178,31 @@ export default function BulkSlipClient({
     setSelected(next);
   }
 
-  function handleGenerate() {
+  async function handleGenerate() {
     if (selected.size === 0) return;
+    setSaving(true);
     setGenerated(true);
+    // Auto-save all selected slips in background
+    const saves = selectedList.map(k =>
+      saveSlipHistory(k.id, periode.bulan, periode.tahun, {
+        namaKaryawan: k.nama,
+        jabatan: k.jabatan,
+        departemen: k.departemen,
+        namaPerusahaan: perusahaan?.nama ?? "",
+        logoUrl: perusahaan?.logo_url ?? "",
+        statusPTKP: k.status_ptkp,
+        punyaNPWP: k.punya_npwp,
+        gajiPokok: k.gaji_pokok,
+        tunjangan: k.tunjangan,
+        potonganManual: [],
+        includeBpjsKes: k.include_bpjs_kes,
+        includeBpjsJHT: k.include_bpjs_jht,
+        includeBpjsJP: k.include_bpjs_jp,
+        includePph21: k.include_pph21,
+      })
+    );
+    await Promise.allSettled(saves);
+    setSaving(false);
   }
 
   function handlePrintAll() {
@@ -318,7 +342,7 @@ export default function BulkSlipClient({
                   {selectedList.length} slip gaji — {BULAN[periode.bulan - 1]} {periode.tahun}
                 </p>
                 <p className="text-sm text-slate-500 mt-0.5">
-                  Cek preview di bawah, lalu print semua atau per karyawan.
+                  {saving ? "Menyimpan ke riwayat..." : "✓ Tersimpan ke riwayat · Print semua atau per karyawan"}
                 </p>
               </div>
               <div className="flex items-center gap-3">

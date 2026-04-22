@@ -5,6 +5,7 @@ import { createPortal } from "react-dom";
 import Link from "next/link";
 import type { Karyawan } from "@/lib/actions/karyawan";
 import type { Perusahaan } from "@/lib/actions/perusahaan";
+import { saveSlipHistory } from "@/lib/actions/slip-history";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -425,9 +426,13 @@ function FeedbackSection() {
 export default function SlipGajiClient({
   initialKaryawan,
   initialPerusahaan,
+  karyawanId,
+  isPro,
 }: {
   initialKaryawan?: Karyawan | null;
   initialPerusahaan?: Perusahaan | null;
+  karyawanId?: string;
+  isPro?: boolean;
 }) {
   const initialForm = useMemo<FormData>(() => {
     const base: FormData = {
@@ -489,6 +494,38 @@ export default function SlipGajiClient({
     set("potonganManual", form.potonganManual.filter(p => p.id !== id));
 
   const handlePrint = () => window.print();
+
+  const [saving, setSaving] = useState(false);
+  const [saved, setSaved] = useState(false);
+
+  const handleSave = async () => {
+    if (!karyawanId) return;
+    setSaving(true);
+    try {
+      await saveSlipHistory(karyawanId, form.periode.bulan, form.periode.tahun, {
+        namaKaryawan: form.namaKaryawan,
+        jabatan: form.jabatan,
+        departemen: form.departemen,
+        namaPerusahaan: form.namaPerusahaan,
+        logoUrl: form.logoUrl,
+        statusPTKP: form.statusPTKP,
+        punyaNPWP: form.punyaNPWP,
+        gajiPokok: form.gajiPokok,
+        tunjangan: form.tunjangan,
+        potonganManual: form.potonganManual,
+        includeBpjsKes: form.includeBpjsKes,
+        includeBpjsJHT: form.includeBpjsJHT,
+        includeBpjsJP: form.includeBpjsJP,
+        includePph21: form.includePph21,
+      });
+      setSaved(true);
+      setTimeout(() => setSaved(false), 3000);
+    } catch {
+      alert("Gagal menyimpan slip.");
+    } finally {
+      setSaving(false);
+    }
+  };
 
   const calc = calcAll(form);
 
@@ -744,6 +781,19 @@ export default function SlipGajiClient({
             >
               <span>⬇</span> Download / Print PDF
             </button>
+            {isPro && karyawanId && (
+              <button
+                onClick={handleSave}
+                disabled={saving || saved}
+                className={`w-full py-3 rounded-2xl font-semibold text-sm transition-colors flex items-center justify-center gap-2 ${
+                  saved
+                    ? "bg-emerald-50 text-emerald-600 border border-emerald-200"
+                    : "bg-white text-slate-700 border border-slate-200 hover:bg-slate-50"
+                }`}
+              >
+                {saved ? "✓ Slip tersimpan" : saving ? "Menyimpan..." : "💾 Simpan ke Riwayat"}
+              </button>
+            )}
             <p className="text-center text-xs text-slate-400">
               Klik Download → di dialog print pilih "Save as PDF"
             </p>

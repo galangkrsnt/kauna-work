@@ -3,7 +3,9 @@ import { redirect, notFound } from "next/navigation";
 import Link from "next/link";
 import { getKaryawan } from "@/lib/actions/karyawan";
 import { isPro } from "@/lib/actions/perusahaan";
+import { getSlipHistory } from "@/lib/actions/slip-history";
 import KaryawanForm from "../KaryawanForm";
+import SlipHistorySection from "./SlipHistorySection";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -18,7 +20,7 @@ export default async function EditKaryawanPage({ params }: { params: Promise<{ i
   if (!pro) redirect("/upgrade");
 
   const { id } = await params;
-  const semua = await getKaryawan();
+  const [semua, history] = await Promise.all([getKaryawan(), getSlipHistory(id)]);
   const karyawan = semua.find((k) => k.id === id);
   if (!karyawan) notFound();
 
@@ -38,23 +40,29 @@ export default async function EditKaryawanPage({ params }: { params: Promise<{ i
           <h1 className="text-xl font-bold text-slate-900">Edit — {karyawan.nama}</h1>
         </div>
       </div>
-      <KaryawanForm
-        mode="edit"
-        id={karyawan.id}
-        defaultValues={{
-          nama: karyawan.nama,
-          jabatan: karyawan.jabatan,
-          departemen: karyawan.departemen,
-          status_ptkp: karyawan.status_ptkp,
-          punya_npwp: karyawan.punya_npwp,
-          gaji_pokok: karyawan.gaji_pokok,
-          tunjangan: karyawan.tunjangan,
-          include_bpjs_kes: karyawan.include_bpjs_kes,
-          include_bpjs_jht: karyawan.include_bpjs_jht,
-          include_bpjs_jp: karyawan.include_bpjs_jp,
-          include_pph21: karyawan.include_pph21,
-        }}
-      />
+
+      <div className="max-w-2xl mx-auto px-4 pb-8">
+        <KaryawanForm
+          mode="edit"
+          id={karyawan.id}
+          defaultValues={{
+            nama: karyawan.nama,
+            jabatan: karyawan.jabatan,
+            departemen: karyawan.departemen,
+            status_ptkp: karyawan.status_ptkp,
+            punya_npwp: karyawan.punya_npwp,
+            gaji_pokok: karyawan.gaji_pokok,
+            tunjangan: karyawan.tunjangan,
+            include_bpjs_kes: karyawan.include_bpjs_kes,
+            include_bpjs_jht: karyawan.include_bpjs_jht,
+            include_bpjs_jp: karyawan.include_bpjs_jp,
+            include_pph21: karyawan.include_pph21,
+          }}
+        />
+        <div className="mt-2">
+          <SlipHistorySection history={history} karyawanId={id} />
+        </div>
+      </div>
     </div>
   );
 }

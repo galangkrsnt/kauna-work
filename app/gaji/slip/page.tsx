@@ -3,7 +3,7 @@ import { auth } from "@clerk/nextjs/server";
 import Navbar from "../../components/Navbar";
 import SlipGajiClient from "./SlipGajiClient";
 import { getKaryawan } from "@/lib/actions/karyawan";
-import { getPerusahaan } from "@/lib/actions/perusahaan";
+import { getPerusahaan, isPro } from "@/lib/actions/perusahaan";
 
 export const metadata: Metadata = {
   title: "Generator Slip Gaji Online Gratis | Kauna Work",
@@ -30,9 +30,10 @@ export default async function SlipGajiPage({
 
   let initialKaryawan = null;
   let initialPerusahaan = null;
+  let pro = false;
 
   if (userId) {
-    initialPerusahaan = await getPerusahaan();
+    [initialPerusahaan, pro] = await Promise.all([getPerusahaan(), isPro()]);
     if (karyawanId) {
       const list = await getKaryawan();
       initialKaryawan = list.find((k) => k.id === karyawanId) ?? null;
@@ -42,7 +43,12 @@ export default async function SlipGajiPage({
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
-      <SlipGajiClient initialKaryawan={initialKaryawan} initialPerusahaan={initialPerusahaan} />
+      <SlipGajiClient
+        initialKaryawan={initialKaryawan}
+        initialPerusahaan={initialPerusahaan}
+        karyawanId={karyawanId}
+        isPro={pro}
+      />
     </div>
   );
 }
