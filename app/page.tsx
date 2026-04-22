@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Navbar from "./components/Navbar";
+import { isPro } from "@/lib/actions/perusahaan";
 
 const tools = [
   {
@@ -78,7 +79,8 @@ const pricingPlans = [
   },
 ];
 
-export default function HomePage() {
+export default async function HomePage() {
+  const pro = await isPro();
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
@@ -155,72 +157,88 @@ export default function HomePage() {
         </section>
 
         {/* Pricing */}
-        <section className="bg-slate-50 border-y border-slate-200 py-20">
-          <div className="max-w-6xl mx-auto px-4 sm:px-6">
-            <h2 className="text-2xl font-bold text-slate-900 mb-2 text-center">Harga Transparan</h2>
-            <p className="text-slate-500 text-sm text-center mb-12">Mulai gratis, upgrade kalau butuh lebih.</p>
-
-            <div className="grid sm:grid-cols-3 gap-5 max-w-4xl mx-auto">
-              {pricingPlans.map((plan) => (
-                <div
-                  key={plan.name}
-                  className={`relative rounded-3xl border p-6 flex flex-col gap-5 bg-white ${
-                    plan.highlight
-                      ? "border-blue-400 shadow-lg shadow-blue-100 ring-1 ring-blue-400"
-                      : "border-slate-200"
-                  }`}
-                >
-                  {plan.tag && (
-                    <span className="absolute -top-3 left-1/2 -translate-x-1/2 text-xs bg-blue-600 text-white px-3 py-1 rounded-full font-semibold whitespace-nowrap">
-                      {plan.tag}
-                    </span>
-                  )}
-
-                  <div>
-                    <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">{plan.name}</p>
-                    <div className="flex items-baseline gap-1">
-                      <span className="text-3xl font-bold text-slate-900">{plan.price}</span>
-                      {plan.period && <span className="text-sm text-slate-400">{plan.period}</span>}
-                    </div>
-                    <p className="text-xs text-slate-400 mt-1">{plan.desc}</p>
-                  </div>
-
-                  <ul className="space-y-2 flex-1">
-                    {plan.features.map((f) => (
-                      <li key={f} className="flex items-start gap-2 text-sm text-slate-600">
-                        <span className="text-emerald-500 mt-0.5 shrink-0">✓</span>
-                        {f}
-                      </li>
-                    ))}
-                    {plan.missing.map((f) => (
-                      <li key={f} className="flex items-start gap-2 text-sm text-slate-300">
-                        <span className="mt-0.5 shrink-0">✗</span>
-                        {f}
-                      </li>
-                    ))}
-                  </ul>
-
-                  {plan.href ? (
-                    <Link
-                      href={plan.href}
-                      className={`text-center px-4 py-2.5 rounded-xl text-sm font-semibold transition-colors ${
-                        plan.highlight
-                          ? "bg-blue-600 text-white hover:bg-blue-700 shadow-sm shadow-blue-200"
-                          : "border border-slate-200 text-slate-700 hover:bg-slate-50"
-                      }`}
-                    >
-                      {plan.cta}
-                    </Link>
-                  ) : (
-                    <span className="text-center block px-4 py-2.5 rounded-xl text-sm font-semibold bg-amber-50 text-amber-600 border border-amber-200">
-                      {plan.cta}
-                    </span>
-                  )}
-                </div>
-              ))}
+        {pro ? (
+          <section className="bg-slate-50 border-y border-slate-200 py-16">
+            <div className="max-w-lg mx-auto px-4 text-center">
+              <span className="inline-block text-xs font-bold bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full mb-4 uppercase tracking-widest">
+                ✓ Kamu sudah Pro
+              </span>
+              <p className="text-slate-600 text-sm mb-6">
+                Semua fitur Pro aktif di akunmu. Kelola karyawan dan buat slip gaji dari dashboard.
+              </p>
+              <Link
+                href="/dashboard"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-blue-600 text-white font-semibold text-sm hover:bg-blue-700 transition-colors"
+              >
+                Buka Dashboard →
+              </Link>
             </div>
-          </div>
-        </section>
+          </section>
+        ) : (
+          <section className="bg-slate-50 border-y border-slate-200 py-20">
+            <div className="max-w-6xl mx-auto px-4 sm:px-6">
+              <h2 className="text-2xl font-bold text-slate-900 mb-2 text-center">Harga Transparan</h2>
+              <p className="text-slate-500 text-sm text-center mb-12">Mulai gratis, upgrade kalau butuh lebih.</p>
+
+              <div className="grid sm:grid-cols-3 gap-5 max-w-4xl mx-auto">
+                {pricingPlans.map((plan) => (
+                  <div
+                    key={plan.name}
+                    className={`relative rounded-3xl border p-6 flex flex-col gap-5 bg-white ${
+                      plan.highlight
+                        ? "border-blue-400 shadow-lg shadow-blue-100 ring-1 ring-blue-400"
+                        : "border-slate-200"
+                    }`}
+                  >
+                    {plan.tag && (
+                      <span className="absolute -top-3 left-1/2 -translate-x-1/2 text-xs bg-blue-600 text-white px-3 py-1 rounded-full font-semibold whitespace-nowrap">
+                        {plan.tag}
+                      </span>
+                    )}
+                    <div>
+                      <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">{plan.name}</p>
+                      <div className="flex items-baseline gap-1">
+                        <span className="text-3xl font-bold text-slate-900">{plan.price}</span>
+                        {plan.period && <span className="text-sm text-slate-400">{plan.period}</span>}
+                      </div>
+                      <p className="text-xs text-slate-400 mt-1">{plan.desc}</p>
+                    </div>
+                    <ul className="space-y-2 flex-1">
+                      {plan.features.map((f) => (
+                        <li key={f} className="flex items-start gap-2 text-sm text-slate-600">
+                          <span className="text-emerald-500 mt-0.5 shrink-0">✓</span>
+                          {f}
+                        </li>
+                      ))}
+                      {plan.missing.map((f) => (
+                        <li key={f} className="flex items-start gap-2 text-sm text-slate-300">
+                          <span className="mt-0.5 shrink-0">✗</span>
+                          {f}
+                        </li>
+                      ))}
+                    </ul>
+                    {plan.href ? (
+                      <Link
+                        href={plan.href}
+                        className={`text-center px-4 py-2.5 rounded-xl text-sm font-semibold transition-colors ${
+                          plan.highlight
+                            ? "bg-blue-600 text-white hover:bg-blue-700 shadow-sm shadow-blue-200"
+                            : "border border-slate-200 text-slate-700 hover:bg-slate-50"
+                        }`}
+                      >
+                        {plan.cta}
+                      </Link>
+                    ) : (
+                      <span className="text-center block px-4 py-2.5 rounded-xl text-sm font-semibold bg-amber-50 text-amber-600 border border-amber-200">
+                        {plan.cta}
+                      </span>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
       </main>
 
       {/* Footer */}

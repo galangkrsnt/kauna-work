@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Navbar from "../components/Navbar";
+import { isPro } from "@/lib/actions/perusahaan";
 
 export const metadata: Metadata = {
   title: "Cara Pakai Slip Gaji Generator — Kauna Work",
@@ -108,6 +109,7 @@ const faqs = [
 ];
 
 export default async function PanduanPage() {
+  const pro = await isPro();
   return (
     <div className="min-h-screen flex flex-col bg-white">
       <Navbar />
@@ -215,18 +217,29 @@ export default async function PanduanPage() {
           </div>
 
           <div className="mt-6 flex items-center gap-3 flex-wrap">
-            <Link
-              href="/upgrade"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-blue-600 text-white text-sm font-semibold hover:bg-blue-700 transition-colors shadow-sm shadow-blue-200"
-            >
-              Upgrade ke Pro →
-            </Link>
-            <Link
-              href="/#pricing"
-              className="text-sm text-slate-500 hover:text-slate-700 transition-colors"
-            >
-              Lihat harga
-            </Link>
+            {pro ? (
+              <Link
+                href="/dashboard"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-emerald-600 text-white text-sm font-semibold hover:bg-emerald-700 transition-colors shadow-sm shadow-emerald-200"
+              >
+                Buka Dashboard →
+              </Link>
+            ) : (
+              <>
+                <Link
+                  href="/upgrade"
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-blue-600 text-white text-sm font-semibold hover:bg-blue-700 transition-colors shadow-sm shadow-blue-200"
+                >
+                  Upgrade ke Pro →
+                </Link>
+                <Link
+                  href="/#pricing"
+                  className="text-sm text-slate-500 hover:text-slate-700 transition-colors"
+                >
+                  Lihat harga
+                </Link>
+              </>
+            )}
           </div>
         </section>
 
@@ -293,24 +306,41 @@ export default async function PanduanPage() {
 
         {/* Bottom CTA */}
         <section className="rounded-3xl bg-slate-900 text-white p-8 text-center">
-          <h2 className="text-2xl font-bold mb-2">Siap coba?</h2>
-          <p className="text-slate-400 text-sm mb-6">
-            Mulai gratis tanpa daftar, atau langsung daftar Pro.
-          </p>
-          <div className="flex items-center justify-center gap-3 flex-wrap">
-            <Link
-              href="/gaji/slip"
-              className="px-6 py-3 rounded-xl bg-white text-slate-900 text-sm font-semibold hover:bg-slate-100 transition-colors"
-            >
-              Coba Gratis
-            </Link>
-            <Link
-              href="/upgrade"
-              className="px-6 py-3 rounded-xl bg-blue-600 text-white text-sm font-semibold hover:bg-blue-700 transition-colors shadow-sm shadow-blue-900"
-            >
-              Upgrade Pro
-            </Link>
-          </div>
+          {pro ? (
+            <>
+              <h2 className="text-2xl font-bold mb-2">Kamu sudah Pro!</h2>
+              <p className="text-slate-400 text-sm mb-6">
+                Semua fitur Pro aktif. Langsung generate slip dari dashboard.
+              </p>
+              <Link
+                href="/dashboard"
+                className="px-6 py-3 rounded-xl bg-emerald-500 text-white text-sm font-semibold hover:bg-emerald-600 transition-colors"
+              >
+                Buka Dashboard →
+              </Link>
+            </>
+          ) : (
+            <>
+              <h2 className="text-2xl font-bold mb-2">Siap coba?</h2>
+              <p className="text-slate-400 text-sm mb-6">
+                Mulai gratis tanpa daftar, atau langsung daftar Pro.
+              </p>
+              <div className="flex items-center justify-center gap-3 flex-wrap">
+                <Link
+                  href="/gaji/slip"
+                  className="px-6 py-3 rounded-xl bg-white text-slate-900 text-sm font-semibold hover:bg-slate-100 transition-colors"
+                >
+                  Coba Gratis
+                </Link>
+                <Link
+                  href="/upgrade"
+                  className="px-6 py-3 rounded-xl bg-blue-600 text-white text-sm font-semibold hover:bg-blue-700 transition-colors shadow-sm shadow-blue-900"
+                >
+                  Upgrade Pro
+                </Link>
+              </div>
+            </>
+          )}
         </section>
 
       </main>

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Navbar from "../components/Navbar";
+import { isPro } from "@/lib/actions/perusahaan";
 
 export const metadata: Metadata = {
   title: "Kauna Work untuk Perusahaan — Segera Hadir",
@@ -73,7 +74,8 @@ function Check({ ok }: { ok: boolean }) {
     : <span className="text-slate-200">✗</span>;
 }
 
-export default function PerusahaanPage() {
+export default async function PerusahaanPage() {
+  const pro = await isPro();
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
@@ -145,12 +147,23 @@ export default function PerusahaanPage() {
                     <td className="px-5 py-4 font-semibold text-slate-700">Harga</td>
                     <td className="px-4 py-4 text-center text-slate-500 text-xs">Rp 0</td>
                     <td className="px-4 py-4 text-center">
-                      <div className="flex flex-col items-center gap-1.5">
-                        <span className="text-xs font-semibold text-slate-700">Rp 49.000<span className="font-normal text-slate-400">/bln</span></span>
-                        <Link href="/upgrade" className="text-xs bg-blue-600 text-white font-semibold px-3 py-1 rounded-full hover:bg-blue-700 transition-colors">
-                          Mulai Pro
-                        </Link>
-                      </div>
+                      {pro ? (
+                        <div className="flex flex-col items-center gap-1.5">
+                          <span className="text-xs font-semibold text-emerald-700 bg-emerald-100 px-3 py-1 rounded-full">
+                            ✓ Aktif
+                          </span>
+                          <Link href="/dashboard" className="text-xs text-blue-600 hover:underline">
+                            Buka Dashboard
+                          </Link>
+                        </div>
+                      ) : (
+                        <div className="flex flex-col items-center gap-1.5">
+                          <span className="text-xs font-semibold text-slate-700">Rp 49.000<span className="font-normal text-slate-400">/bln</span></span>
+                          <Link href="/upgrade" className="text-xs bg-blue-600 text-white font-semibold px-3 py-1 rounded-full hover:bg-blue-700 transition-colors">
+                            Mulai Pro
+                          </Link>
+                        </div>
+                      )}
                     </td>
                     <td className="px-4 py-4 text-center bg-blue-50/40">
                       <span className="text-xs text-amber-600 font-semibold bg-amber-100 px-2 py-1 rounded-full">Segera Hadir</span>
