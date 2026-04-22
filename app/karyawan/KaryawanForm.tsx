@@ -9,6 +9,7 @@ const STATUS_PTKP = ["TK/0", "TK/1", "TK/2", "TK/3", "K/0", "K/1", "K/2", "K/3",
 type Props = {
   mode: "tambah" | "edit";
   id?: string;
+  backUrl?: string;
   defaultValues?: Partial<KaryawanInput>;
 };
 
@@ -28,7 +29,7 @@ function emptyInput(): KaryawanInput {
   };
 }
 
-export default function KaryawanForm({ mode, id, defaultValues }: Props) {
+export default function KaryawanForm({ mode, id, backUrl, defaultValues }: Props) {
   const router = useRouter();
   const [form, setForm] = useState<KaryawanInput>({ ...emptyInput(), ...defaultValues });
   const [loading, setLoading] = useState(false);
@@ -66,7 +67,7 @@ export default function KaryawanForm({ mode, id, defaultValues }: Props) {
       } else if (id) {
         await updateKaryawan(id, form);
       }
-      router.push("/karyawan");
+      router.push(backUrl ?? "/karyawan");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Terjadi kesalahan.");
     } finally {
@@ -264,7 +265,7 @@ export default function KaryawanForm({ mode, id, defaultValues }: Props) {
       <div className="flex gap-3 justify-end">
         <button
           type="button"
-          onClick={() => router.back()}
+          onClick={() => backUrl ? router.push(backUrl) : router.back()}
           className="px-5 py-2.5 text-sm text-slate-600 border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors"
         >
           Batal
