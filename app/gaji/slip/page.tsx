@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
+import { auth } from "@clerk/nextjs/server";
 import Navbar from "../../components/Navbar";
 import SlipGajiClient from "./SlipGajiClient";
+import { getKaryawan } from "@/lib/actions/karyawan";
+import { getPerusahaan } from "@/lib/actions/perusahaan";
 
 export const metadata: Metadata = {
   title: "Generator Slip Gaji Online Gratis | Kauna Work",
@@ -17,11 +20,29 @@ export const metadata: Metadata = {
   alternates: { canonical: "https://work.getkauna.com/gaji/slip" },
 };
 
-export default function SlipGajiPage() {
+export default async function SlipGajiPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ karyawanId?: string }>;
+}) {
+  const { userId } = await auth();
+  const { karyawanId } = await searchParams;
+
+  let initialKaryawan = null;
+  let initialPerusahaan = null;
+
+  if (userId) {
+    initialPerusahaan = await getPerusahaan();
+    if (karyawanId) {
+      const list = await getKaryawan();
+      initialKaryawan = list.find((k) => k.id === karyawanId) ?? null;
+    }
+  }
+
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
-      <SlipGajiClient />
+      <SlipGajiClient initialKaryawan={initialKaryawan} initialPerusahaan={initialPerusahaan} />
     </div>
   );
 }

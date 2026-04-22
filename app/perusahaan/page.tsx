@@ -92,12 +92,12 @@ export default function PerusahaanPage() {
             Satu dashboard untuk kelola seluruh karyawan, generate slip gaji massal,
             dan pantau penggajian bulanan — tanpa Excel, tanpa ribet.
           </p>
-          <a
-            href="mailto:kaunaverse@gmail.com?subject=Interest: Kauna Work untuk Perusahaan&body=Halo, saya tertarik dengan fitur Kauna Work untuk Perusahaan. Mohon beritahu saya saat sudah tersedia."
+          <Link
+            href="/kontak"
             className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-blue-600 text-white font-semibold hover:bg-blue-700 transition-colors shadow-md shadow-blue-200"
           >
             ✉ Beritahu Saya Saat Tersedia
-          </a>
+          </Link>
         </section>
 
         {/* Features grid */}
@@ -144,8 +144,13 @@ export default function PerusahaanPage() {
                   <tr className="border-t border-slate-100 bg-slate-50">
                     <td className="px-5 py-4 font-semibold text-slate-700">Harga</td>
                     <td className="px-4 py-4 text-center text-slate-500 text-xs">Rp 0</td>
-                    <td className="px-4 py-4 text-center bg-blue-50/40">
-                      <span className="text-xs text-amber-600 font-semibold bg-amber-100 px-2 py-1 rounded-full">Segera Hadir</span>
+                    <td className="px-4 py-4 text-center">
+                      <div className="flex flex-col items-center gap-1.5">
+                        <span className="text-xs font-semibold text-slate-700">Rp 49.000<span className="font-normal text-slate-400">/bln</span></span>
+                        <Link href="/upgrade" className="text-xs bg-blue-600 text-white font-semibold px-3 py-1 rounded-full hover:bg-blue-700 transition-colors">
+                          Mulai Pro
+                        </Link>
+                      </div>
                     </td>
                     <td className="px-4 py-4 text-center bg-blue-50/40">
                       <span className="text-xs text-amber-600 font-semibold bg-amber-100 px-2 py-1 rounded-full">Segera Hadir</span>
@@ -165,12 +170,12 @@ export default function PerusahaanPage() {
             Kirim email dan kamu jadi yang pertama tahu saat plan Perusahaan diluncurkan.
             Kami juga terbuka untuk diskusi kebutuhan spesifik tim kamu.
           </p>
-          <a
-            href="mailto:kaunaverse@gmail.com?subject=Interest: Kauna Work untuk Perusahaan&body=Halo, saya tertarik dengan fitur Kauna Work untuk Perusahaan. Mohon beritahu saya saat sudah tersedia."
+          <Link
+            href="/kontak"
             className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 text-white text-sm font-semibold hover:bg-blue-700 transition-colors shadow-sm shadow-blue-200"
           >
             ✉ Hubungi Kami
-          </a>
+          </Link>
           <div className="mt-6">
             <Link href="/gaji/slip" className="text-sm text-slate-400 hover:text-blue-600 transition-colors">
               Atau coba Slip Gaji gratis sekarang →

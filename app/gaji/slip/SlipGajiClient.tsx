@@ -1,7 +1,10 @@
 "use client";
 
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useMemo } from "react";
 import { createPortal } from "react-dom";
+import Link from "next/link";
+import type { Karyawan } from "@/lib/actions/karyawan";
+import type { Perusahaan } from "@/lib/actions/perusahaan";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -419,8 +422,37 @@ function FeedbackSection() {
 
 // ─── Main Component ───────────────────────────────────────────────────────────
 
-export default function SlipGajiClient() {
-  const [form, setForm] = useState<FormData>(DEFAULT);
+export default function SlipGajiClient({
+  initialKaryawan,
+  initialPerusahaan,
+}: {
+  initialKaryawan?: Karyawan | null;
+  initialPerusahaan?: Perusahaan | null;
+}) {
+  const initialForm = useMemo<FormData>(() => {
+    const base: FormData = {
+      ...DEFAULT,
+      namaPerusahaan: initialPerusahaan?.nama ?? DEFAULT.namaPerusahaan,
+      logoUrl: initialPerusahaan?.logo_url ?? DEFAULT.logoUrl,
+    };
+    if (!initialKaryawan) return base;
+    return {
+      ...base,
+      namaKaryawan: initialKaryawan.nama,
+      jabatan: initialKaryawan.jabatan,
+      departemen: initialKaryawan.departemen,
+      statusPTKP: initialKaryawan.status_ptkp,
+      punyaNPWP: initialKaryawan.punya_npwp,
+      gajiPokok: initialKaryawan.gaji_pokok,
+      tunjangan: initialKaryawan.tunjangan.map((t) => ({ ...t })),
+      includeBpjsKes: initialKaryawan.include_bpjs_kes,
+      includeBpjsJHT: initialKaryawan.include_bpjs_jht,
+      includeBpjsJP: initialKaryawan.include_bpjs_jp,
+      includePph21: initialKaryawan.include_pph21,
+    };
+  }, [initialKaryawan, initialPerusahaan]);
+
+  const [form, setForm] = useState<FormData>(initialForm);
   const [mounted, setMounted] = useState(false);
   useEffect(() => { setMounted(true); }, []);
 
@@ -482,9 +514,17 @@ export default function SlipGajiClient() {
       `}</style>
 
       <main className="flex-1 max-w-6xl mx-auto px-4 sm:px-6 py-8 w-full">
-        <div className="mb-6">
-          <h1 className="text-2xl font-bold text-slate-900 mb-1">Generator Slip Gaji</h1>
-          <p className="text-slate-500 text-sm">Isi form di kiri, preview langsung di kanan. Download PDF gratis.</p>
+        <div className="mb-6 flex items-start justify-between gap-4">
+          <div>
+            <h1 className="text-2xl font-bold text-slate-900 mb-1">Generator Slip Gaji</h1>
+            <p className="text-slate-500 text-sm">Isi form di kiri, preview langsung di kanan. Download PDF gratis.</p>
+          </div>
+          <Link
+            href="/panduan"
+            className="shrink-0 text-xs text-blue-600 border border-blue-200 bg-blue-50 px-3 py-1.5 rounded-lg hover:bg-blue-100 transition-colors font-medium"
+          >
+            Cara pakai →
+          </Link>
         </div>
 
         <div className="grid lg:grid-cols-2 gap-8 items-start">
