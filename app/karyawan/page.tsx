@@ -77,7 +77,7 @@ export default async function KaryawanPage() {
                     href={`/karyawan/${k.id}`}
                     className="text-sm text-slate-500 px-3 py-1.5 rounded-lg hover:bg-slate-100 transition-colors"
                   >
-                    Edit
+                    Detail & Riwayat
                   </Link>
                   <KaryawanActions id={k.id} nama={k.nama} />
                 </div>

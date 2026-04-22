@@ -154,7 +154,7 @@ export default async function DashboardPage() {
                       href={`/karyawan/${k.id}`}
                       className="text-sm text-slate-500 hover:text-slate-800"
                     >
-                      Edit
+                      Detail & Riwayat
                     </Link>
                   </div>
                 </li>
