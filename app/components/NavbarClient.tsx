@@ -21,9 +21,8 @@ export default function NavbarClient({ isSignedIn }: { isSignedIn: boolean }) {
           <Link href="/gaji/slip" className="text-sm text-slate-600 hover:text-blue-600 font-medium transition-colors">
             Slip Gaji
           </Link>
-          <Link href="/faktur" className="text-sm text-slate-600 hover:text-blue-600 font-medium transition-colors flex items-center gap-1.5">
+          <Link href="/faktur" className="text-sm text-slate-600 hover:text-blue-600 font-medium transition-colors">
             Faktur
-            <span className="text-xs bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded-full font-semibold">Soon</span>
           </Link>
           <Link href="/perusahaan" className="text-sm text-slate-600 hover:text-blue-600 font-medium transition-colors flex items-center gap-1.5">
             Untuk Perusahaan
@@ -79,10 +78,9 @@ export default function NavbarClient({ isSignedIn }: { isSignedIn: boolean }) {
           <Link
             href="/faktur"
             onClick={() => setMobileOpen(false)}
-            className="flex items-center gap-2 px-4 py-3 rounded-xl text-sm font-medium text-slate-700 hover:bg-blue-50 transition-colors"
+            className="block px-4 py-3 rounded-xl text-sm font-medium text-slate-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
           >
             Faktur
-            <span className="text-xs bg-amber-100 text-amber-700 px-1.5 py-0.5 rounded-full font-semibold">Soon</span>
           </Link>
           <Link
             href="/perusahaan"

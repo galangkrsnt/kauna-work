@@ -164,7 +164,7 @@ export default async function DashboardPage() {
         </div>
 
         {/* Quick actions */}
-        <div className="grid sm:grid-cols-3 gap-4">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <Link
             href="/gaji/slip"
             className="bg-white rounded-xl border border-slate-200 p-5 hover:border-blue-300 hover:shadow-sm transition-all group"
@@ -180,11 +180,18 @@ export default async function DashboardPage() {
             <p className="text-sm text-slate-500 mt-1">Generate slip untuk semua karyawan sekaligus</p>
           </Link>
           <Link
-            href="/karyawan/tambah"
+            href="/faktur"
+            className="bg-white rounded-xl border border-slate-200 p-5 hover:border-purple-300 hover:shadow-sm transition-all group"
+          >
+            <p className="font-semibold text-slate-800 group-hover:text-purple-600">Buat Faktur</p>
+            <p className="text-sm text-slate-500 mt-1">Generate faktur & invoice, download PDF</p>
+          </Link>
+          <Link
+            href="/dashboard/faktur"
             className="bg-white rounded-xl border border-slate-200 p-5 hover:border-slate-300 hover:shadow-sm transition-all group"
           >
-            <p className="font-semibold text-slate-800 group-hover:text-slate-900">Tambah Karyawan</p>
-            <p className="text-sm text-slate-500 mt-1">Simpan data karyawan baru</p>
+            <p className="font-semibold text-slate-800 group-hover:text-slate-900">Riwayat Faktur</p>
+            <p className="text-sm text-slate-500 mt-1">Lihat & kelola faktur tersimpan</p>
           </Link>
         </div>
 
