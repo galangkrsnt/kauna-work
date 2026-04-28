@@ -15,11 +15,11 @@ const tools = [
   {
     icon: "📄",
     title: "Faktur",
-    desc: "Buat faktur / invoice profesional untuk klien kamu. Kirim langsung atau download PDF.",
+    desc: "Buat faktur / invoice profesional untuk klien kamu. PPN otomatis, download PDF gratis.",
     href: "/faktur",
-    badge: "Segera Hadir",
-    cta: "Lihat Info",
-    active: false,
+    badge: null,
+    cta: "Buat Faktur",
+    active: true,
   },
 ];
 
@@ -31,11 +31,12 @@ const pricingPlans = [
     desc: "Untuk penggunaan sesekali.",
     features: [
       "Generate slip gaji unlimited",
+      "Buat faktur / invoice",
       "Download PDF",
-      "Hitung PPh 21 & BPJS otomatis",
+      "Hitung PPh 21, BPJS & PPN otomatis",
       "Tanpa perlu daftar",
     ],
-    missing: ["Simpan data karyawan", "Riwayat slip", "Bulk generate", "Simpan profil perusahaan"],
+    missing: ["Simpan data karyawan", "Katalog item faktur", "Riwayat slip & faktur", "Bulk generate"],
     cta: "Mulai Gratis",
     href: "/gaji/slip",
     highlight: false,
@@ -49,7 +50,8 @@ const pricingPlans = [
     features: [
       "Semua fitur Free",
       "Simpan data karyawan",
-      "Riwayat slip per karyawan",
+      "Riwayat slip & faktur tersimpan",
+      "Katalog item faktur — reuse tanpa ketik ulang",
       "Bulk generate semua karyawan",
       "Simpan profil & logo perusahaan",
     ],
@@ -67,7 +69,8 @@ const pricingPlans = [
     features: [
       "Semua fitur Free",
       "Simpan data karyawan",
-      "Riwayat slip per karyawan",
+      "Riwayat slip & faktur tersimpan",
+      "Katalog item faktur — reuse tanpa ketik ulang",
       "Bulk generate semua karyawan",
       "Simpan profil & logo perusahaan",
     ],
